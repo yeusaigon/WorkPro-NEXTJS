@@ -1,5 +1,6 @@
 'use client';
 
+import './dashboard/dashboard.css';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   collection,

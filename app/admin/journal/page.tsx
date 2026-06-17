@@ -4,6 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { useEffect, useMemo, useState } from 'react';
 import { getFirebaseAuth, getFirebaseDb } from '@/lib/firebase';
+import './journal.css';
 
 type Task = {
   id: string;

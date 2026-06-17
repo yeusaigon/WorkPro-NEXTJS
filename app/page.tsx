@@ -1,5 +1,6 @@
 'use client';
 
+import './page.css';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';

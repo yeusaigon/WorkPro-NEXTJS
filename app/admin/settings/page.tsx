@@ -1,5 +1,6 @@
 'use client';
 
+import './settings.css';
 import { useState } from 'react';
 
 const tabs = [

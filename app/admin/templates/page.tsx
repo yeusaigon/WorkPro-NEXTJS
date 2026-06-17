@@ -1,5 +1,6 @@
 'use client';
 
+import './templates.css';
 import { onAuthStateChanged } from 'firebase/auth';
 import {
   addDoc,

@@ -1,3 +1,4 @@
+/* ══════════════════════════════════════════════════════════════════════
    JOURNAL PAGE
    ══════════════════════════════════════════════════════════════════════ */
 
@@ -242,3 +243,132 @@
   padding: 0 10px;
   border-radius: 999px;
   font-size: 11px;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   MOBILE – Journal
+   ══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .journal-page {
+    gap: 10px;
+  }
+
+  .journal-banner {
+    display: none;
+  }
+
+  .journal-toolbar {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .journal-filters {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .journal-period-select {
+    min-height: 40px;
+    padding: 0 10px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .journal-search {
+    flex: 1;
+    min-height: 40px;
+    min-width: 0;
+    border-radius: 10px;
+    padding: 0 10px;
+  }
+
+  .journal-search input {
+    font-size: 13px;
+  }
+
+  .journal-search svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .journal-stats {
+    font-size: 13px;
+  }
+
+  .journal-table-wrap {
+    border-radius: 10px;
+  }
+
+  .journal-table {
+    min-width: 0;
+    font-size: 12px;
+    table-layout: auto;
+  }
+
+  .journal-table th,
+  .journal-table td {
+    padding: 8px 8px;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .journal-table th {
+    font-size: 10px;
+  }
+
+  .journal-col-date { width: 110px; min-width: 110px; white-space: nowrap; }
+  .journal-col-title { width: 110px; min-width: 110px; }
+  .journal-col-desc { width: auto; }
+  .journal-col-priority { display: none; }
+  .journal-col-collab { display: none; }
+
+  .journal-cell-date {
+    font-size: 11px;
+    white-space: nowrap;
+    width: 110px;
+    min-width: 110px;
+  }
+
+  .journal-date-full { display: none; }
+  .journal-date-short { display: inline; }
+
+  .journal-cell-title {
+    font-size: 12px;
+    width: 110px;
+    min-width: 110px;
+  }
+
+  .journal-cell-desc {
+    font-size: 11px;
+  }
+
+  .journal-cell-priority { display: none; }
+  .journal-cell-collab { display: none; }
+
+  .journal-empty {
+    padding: 32px 16px;
+  }
+
+  .journal-empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .journal-empty-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .journal-empty-title {
+    font-size: 14px;
+  }
+
+  .journal-skeleton-item {
+    height: 40px;
+  }
+}
+

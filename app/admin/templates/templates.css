@@ -1,0 +1,356 @@
+/* ══════════════════════════════════════════════════════════════════════
+   TEMPLATES PAGE
+   ══════════════════════════════════════════════════════════════════════ */
+
+.templates-page {
+  display: grid;
+  gap: 16px;
+  animation: page-enter var(--duration-slow) var(--ease-out-expo);
+}
+
+.templates-stats {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.templates-list {
+  display: grid;
+  gap: 10px;
+}
+
+.templates-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    transform var(--duration-fast) var(--ease-out-expo);
+  will-change: transform;
+  animation: card-slide-up var(--duration-slow) var(--ease-out-expo) both;
+}
+
+.templates-card:hover {
+  border-color: rgba(37, 99, 235, 0.2);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.templates-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.templates-card-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.templates-recurring-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--primary-bg);
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.templates-card-desc {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.templates-card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.templates-card-trashed {
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.templates-trashed-title {
+  font-weight: 700;
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.templates-trashed-days {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.templates-trash-section {
+  margin-top: 12px;
+}
+
+.templates-trash-title {
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.templates-empty {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+  text-align: center;
+  border-radius: 16px;
+  border: 1px dashed var(--border);
+  background: #fff;
+}
+
+.templates-empty-icon {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: var(--primary-bg);
+  color: var(--primary);
+}
+
+.templates-empty-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.templates-empty-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* ─── Templates guide tab ─── */
+
+.templates-guide {
+  display: grid;
+  gap: 16px;
+}
+
+.templates-guide-card {
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.templates-guide-icon {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--primary-bg);
+  color: var(--primary);
+  margin-bottom: 14px;
+}
+
+.templates-guide-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.templates-guide-title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.templates-guide-subtitle {
+  margin: 20px 0 6px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.templates-guide-text {
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+   MOBILE – Templates
+   ══════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 640px) {
+  .templates-page {
+    gap: 10px;
+  }
+
+  .templates-stats {
+    font-size: 13px;
+  }
+
+  .templates-list {
+    gap: 8px;
+  }
+
+  .templates-card {
+    padding: 14px 16px;
+    border-radius: 12px;
+    gap: 10px;
+  }
+
+  .templates-card-title {
+    font-size: 16px;
+  }
+
+  .templates-recurring-badge {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .templates-card-desc {
+    font-size: 13px;
+  }
+
+  .templates-card-actions {
+    gap: 6px;
+    padding-top: 6px;
+  }
+
+  .templates-card-trashed {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .templates-trashed-days {
+    font-size: 12px;
+  }
+
+  .templates-empty {
+    padding: 32px 16px;
+  }
+
+  .templates-empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .templates-empty-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .templates-empty-title {
+    font-size: 14px;
+  }
+
+  .templates-trash-title {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 400px) {
+  .templates-card {
+    padding: 12px 14px;
+    border-radius: 10px;
+    gap: 8px;
+  }
+
+  .templates-card-title {
+    font-size: 14px;
+  }
+
+  .templates-recurring-badge {
+    font-size: 10px;
+    padding: 2px 8px;
+  }
+
+  .templates-card-desc {
+    font-size: 12px;
+  }
+
+  .templates-card-actions {
+    gap: 4px;
+  }
+
+  .templates-stats {
+    font-size: 12px;
+  }
+
+  .templates-guide-card {
+    padding: 20px;
+  }
+
+  .templates-guide-title {
+    font-size: 16px;
+  }
+
+  .templates-guide-subtitle {
+    font-size: 13px;
+  }
+
+  .templates-guide-text {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .templates-guide-card {
+    padding: 24px;
+    border-radius: 12px;
+  }
+
+  .templates-guide-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 12px;
+  }
+
+  .templates-guide-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .templates-guide-title {
+    font-size: 18px;
+  }
+
+  .templates-guide-subtitle {
+    font-size: 14px;
+  }
+
+  .templates-guide-text {
+    font-size: 13px;
+  }
+}
+
