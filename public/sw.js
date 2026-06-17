@@ -1,5 +1,5 @@
 const CACHE_NAME = 'aworkpro-cache-v5';
-const urlsToCache = ['/', '/login/', '/admin/', '/admin/dashboard/', '/admin/journal/', '/admin/templates/', '/admin/settings/', '/functions/report/', '/logo.svg', '/manifest.json'];
+const urlsToCache = ['/', '/login/', '/admin/', '/admin/dashboard/', '/admin/journal/', '/admin/templates/', '/admin/settings/', '/admin/report/', '/logo.svg', '/manifest.json'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
