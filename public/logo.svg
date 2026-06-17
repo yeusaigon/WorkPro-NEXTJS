@@ -1,0 +1,12 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="aWorkPro Logo">
+  <defs>
+    <linearGradient id="g" x1="40" y1="32" x2="216" y2="224" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#22D3EE"/>
+      <stop offset="1" stop-color="#0284C7"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="128" fill="url(#g)"/>
+  <circle cx="128" cy="128" r="112" fill="white" fill-opacity="0.12"/>
+  <path d="M84 166L108.5 90H123.5L148 166H133.8L128.4 147.6H103.6L98.2 166H84ZM107.2 136.2H124.8L116.1 105.8L107.2 136.2Z" fill="white"/>
+  <path d="M154 166V90H168.8V150.2H202V166H154Z" fill="white"/>
+</svg>

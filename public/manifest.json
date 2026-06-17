@@ -1,0 +1,21 @@
+{
+  "name": "aWorkPro - Quản lý công việc chuyên nghiệp",
+  "short_name": "aWorkPro",
+  "description": "Quản lý công việc chuyên nghiệp, hiệu quả và trực quan.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0891B2",
+  "theme_color": "#0891B2",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
