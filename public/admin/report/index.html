@@ -257,15 +257,17 @@
         </main>
     </div>
 
+    <script src="/admin/report/firebase-config.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const firebaseConfig = await fetch('/api/firebase-config').then(r => {
-            if (!r.ok) throw new Error('Failed to load Firebase configuration');
-            return r.json();
-        });
+        const firebaseConfig = self.__FIREBASE_CONFIG__;
+        if (!firebaseConfig || !firebaseConfig.apiKey) {
+            alert('Firebase configuration is missing. Please contact the administrator.');
+            throw new Error('Missing Firebase configuration');
+        }
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);

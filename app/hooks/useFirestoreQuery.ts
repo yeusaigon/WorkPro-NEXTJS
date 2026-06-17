@@ -90,7 +90,7 @@ export function useFirestoreQuery<T extends { id: string }>(
       const db = getFirebaseDb();
       // Build collection reference from tuple path
       const [first, ...rest] = collectionPath;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line
       let ref: any = collection(db, first);
       for (const seg of rest) {
         ref = collection(ref, seg);

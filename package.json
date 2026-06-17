@@ -3,7 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
+    "predev": "node scripts/generate-firebase-config.js",
     "dev": "next dev",
+    "prebuild": "node scripts/generate-firebase-config.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
