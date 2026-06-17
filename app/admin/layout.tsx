@@ -42,7 +42,7 @@ const navGroups: NavGroup[] = [
   {
     title: 'Phân tích',
     items: [
-      { href: '/admin/report/', label: 'Báo cáo', icon: ReportIcon },
+      { href: '/admin/report/', label: 'Báo cáo tháng', icon: ReportIcon },
     ],
   },
   {

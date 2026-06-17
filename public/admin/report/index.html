@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Báo cáo - aWorkPro</title>
+    <link rel="icon" href="https://imgpx.com/8cna4HvqC996.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Times+New+Roman:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'a-primary': '#0891B2',
+                        'a-primary-dark': '#164E63',
+                        'a-bg-dark': '#0F172A',
+                    },
+                    fontFamily: {
+                        'times': ['"Times New Roman"', 'serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #F1F5F9; height: 100vh; overflow: hidden; }
+        
+        /* Custom Scrollbar */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 20px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #94a3b8; }
+
+        /* A4 Paper Styles */
+        .a4-paper {
+            width: 210mm;
+            min-height: 297mm;
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin: 0 auto;
+            padding: 20mm;
+            position: relative;
+            transform-origin: top center;
+            transition: transform 0.2s ease;
+        }
+
+        /* Drag & Drop */
+        .sortable-item { cursor: grab; transition: background-color 0.2s; }
+        .sortable-item:active { cursor: grabbing; }
+        .sortable-item.dragging { opacity: 0.5; background: #E0F2FE; border: 2px dashed #0891B2; }
+        .sortable-item.drag-over { border-bottom: 2px solid #0891B2; }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; height: auto; overflow: visible; }
+            .no-print { display: none !important; }
+            #app-layout { display: block; height: auto; overflow: visible; }
+            #main-preview { padding: 0; margin: 0; background: white; height: auto; overflow: visible; }
+            .a4-paper {
+                width: 100%;
+                height: auto;
+                min-height: auto;
+                box-shadow: none;
+                margin: 0;
+                padding: 0; 
+                transform: none !important;
+            }
+            * { font-family: 'Times New Roman', serif !important; color: black !important; }
+            table, th, td { border: 1px solid black !important; border-collapse: collapse !important; }
+            th { background-color: #f3f4f6 !important; -webkit-print-color-adjust: exact; font-weight: bold !important; }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <div id="app-layout" class="flex h-full flex-col md:flex-row">
+        
+        <!-- SIDEBAR: Controls & Tools -->
+        <aside class="w-full md:w-96 bg-white border-r border-slate-200 flex flex-col h-[40vh] md:h-full z-20 shadow-xl no-print">
+            <!-- Header -->
+            <div class="p-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div class="flex items-center gap-2">
+                    <a href="/admin/" class="p-1.5 rounded-lg hover:bg-white text-slate-500 hover:text-a-primary transition-colors" title="Quay lại">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="font-bold text-lg text-a-primary-dark">Tạo Báo cáo</h1>
+                </div>
+                <button id="btn-print" class="bg-a-primary text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-a-primary-dark transition-colors flex items-center gap-2 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm7-8a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                    In
+                </button>
+            </div>
+
+            <!-- Content Area (Scrollable) -->
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-4 space-y-6">
+                
+                <!-- 1. Data Source -->
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <label class="text-xs font-bold text-slate-500 uppercase mb-2 block">Dữ liệu nguồn</label>
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <select id="sel-month" class="bg-white border border-slate-200 text-sm rounded-lg p-2 focus:ring-a-primary focus:border-a-primary outline-none"></select>
+                        <select id="sel-year" class="bg-white border border-slate-200 text-sm rounded-lg p-2 focus:ring-a-primary focus:border-a-primary outline-none"></select>
+                    </div>
+                    <button id="btn-refresh" class="w-full py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-sm font-medium rounded-lg transition-colors">
+                        Tải dữ liệu mới nhất
+                    </button>
+                </div>
+
+                <!-- 2. Content Manager -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase">Nội dung báo cáo</label>
+                        <button id="btn-add-group" class="text-xs text-a-primary font-semibold hover:underline">+ Thêm nhóm</button>
+                    </div>
+                    <div class="bg-white border border-slate-200 rounded-xl overflow-hidden">
+                        <div id="sort-list" class="max-h-[300px] overflow-y-auto custom-scrollbar p-1 space-y-1">
+                            <!-- Drag Items injected here -->
+                            <div class="p-4 text-center text-slate-400 text-sm">Đang tải danh sách...</div>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-1 italic">Kéo thả để sắp xếp. Bỏ chọn để ẩn.</p>
+                </div>
+
+                <!-- 3. Configuration (Collapsible) -->
+                <div class="border-t border-slate-100 pt-4">
+                    <button id="btn-toggle-config" class="flex items-center justify-between w-full text-left text-sm font-semibold text-slate-700 hover:text-a-primary transition-colors">
+                        <span>Thông tin chung & Người ký</span>
+                        <svg id="icon-config" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                    <div id="config-panel" class="hidden mt-3 space-y-3">
+                        <div class="space-y-2">
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="unit" placeholder="Tên đơn vị (dòng 1)">
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="dept" placeholder="Tên bộ phận (dòng 2)">
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="recipient" placeholder="Kính gửi (Nơi nhận)">
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="suffix" placeholder="Số hiệu văn bản (vd: BC-TV)">
+                        </div>
+                        <div class="border-t border-slate-100 pt-3 space-y-2">
+                            <p class="text-xs font-semibold text-slate-500">Người ký duyệt</p>
+                            <div class="flex items-center gap-2 mb-2">
+                                <input type="checkbox" id="chk-show-approver" class="rounded text-a-primary focus:ring-a-primary" checked>
+                                <label for="chk-show-approver" class="text-xs text-slate-600">Hiển thị người duyệt</label>
+                            </div>
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="approverTitle" placeholder="Chức danh duyệt">
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="approverName" placeholder="Tên người duyệt">
+                        </div>
+                        <div class="border-t border-slate-100 pt-3 space-y-2">
+                            <p class="text-xs font-semibold text-slate-500">Người lập</p>
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="creatorTitle" placeholder="Chức danh lập">
+                            <input class="cfg-inp w-full text-sm border-slate-200 rounded-lg" data-key="creatorName" placeholder="Tên người lập">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 4. Suggestions -->
+                <div class="border-t border-slate-100 pt-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="text-xs font-bold text-slate-500 uppercase">Đề xuất / Kiến nghị</label>
+                        <button id="btn-auto-suggest" class="text-xs text-a-primary font-semibold hover:underline">Gợi ý tự động</button>
+                    </div>
+                    <textarea id="inp-suggestions" rows="4" class="w-full text-sm border-slate-200 rounded-lg focus:ring-a-primary focus:border-a-primary custom-scrollbar" placeholder="Nhập nội dung kiến nghị..."></textarea>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- MAIN: Preview Area -->
+        <main id="main-preview" class="flex-1 bg-slate-100 overflow-y-auto custom-scrollbar relative p-4 md:p-8 flex justify-center items-start">
+            
+            <!-- Scale Controls (Floating) -->
+            <div class="fixed bottom-4 right-4 bg-white shadow-lg rounded-full px-4 py-2 flex items-center gap-4 border border-slate-200 z-10 no-print">
+                <span class="text-xs font-bold text-slate-400 uppercase">Zoom</span>
+                <input type="range" id="zoom-range" min="0.5" max="1.5" step="0.1" value="1" class="w-24 h-1 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+            </div>
+
+            <!-- The Paper -->
+            <div id="preview-wrapper" class="transition-transform origin-top">
+                <div id="a4-paper" class="a4-paper font-times text-black">
+                    <!-- Skeleton Loader inside Paper -->
+                    <div id="paper-skeleton" class="animate-pulse space-y-6">
+                        <div class="flex justify-between">
+                            <div class="h-4 bg-slate-200 w-32 rounded"></div>
+                            <div class="h-4 bg-slate-200 w-40 rounded"></div>
+                        </div>
+                        <div class="h-8 bg-slate-200 w-2/3 mx-auto rounded mt-8"></div>
+                        <div class="space-y-2 mt-8">
+                            <div class="h-4 bg-slate-200 w-full rounded"></div>
+                            <div class="h-4 bg-slate-200 w-full rounded"></div>
+                            <div class="h-4 bg-slate-200 w-full rounded"></div>
+                        </div>
+                    </div>
+
+                    <!-- Real Content -->
+                    <div id="paper-content" class="hidden">
+                        <!-- Header -->
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="text-center">
+                                <p class="font-bold uppercase text-[11pt]" id="print-unit">TÊN ĐƠN VỊ</p>
+                                <p class="font-bold underline text-[11pt]" id="print-dept">TÊN BỘ PHẬN</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-bold text-[11pt]">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+                                <p class="font-bold underline text-[11pt]">Độc lập - Tự do - Hạnh phúc</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between italic text-[11pt] mb-6">
+                            <p>Số: <span id="print-num">...</span></p>
+                            <p id="print-date">Tp.HCM, ngày...</p>
+                        </div>
+
+                        <h1 class="text-center font-bold text-[14pt] mb-2 uppercase">BÁO CÁO CÔNG VIỆC THÁNG <span id="print-month-title">...</span></h1>
+                        <p class="text-center font-bold text-[12pt] mb-6">Kính gửi: <span id="print-recipient">...</span></p>
+
+                        <div class="text-[12pt]">
+                            <p class="font-bold mb-2">I. Nội dung chi tiết:</p>
+                            <table class="w-full border-collapse border border-black mb-6 text-[11pt]">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="border border-black p-1.5 w-10 text-center">STT</th>
+                                        <th class="border border-black p-1.5 text-left">Nội dung công việc</th>
+                                        <th class="border border-black p-1.5 w-24 text-center">Bắt đầu</th>
+                                        <th class="border border-black p-1.5 w-24 text-center">Kết thúc</th>
+                                        <th class="border border-black p-1.5 w-28 text-left">Ghi chú/Phối hợp</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="print-tbody">
+                                    <!-- Rows generated here -->
+                                </tbody>
+                            </table>
+
+                            <p class="font-bold mb-2">II. Đề xuất/Kiến nghị:</p>
+                            <div id="print-suggest" class="whitespace-pre-wrap pl-4 mb-8 text-justify">Không có.</div>
+
+                            <!-- Footer / Signature -->
+                            <!-- Sử dụng Grid 2 cột đều nhau để đảm bảo Nhân viên luôn nằm ở nửa bên phải -->
+                            <div class="grid grid-cols-2 mt-10">
+                                <!-- Cột Người duyệt (Trái) -->
+                                <div class="text-center" id="area-approver">
+                                    <p class="font-bold" id="print-approver-title">...</p>
+                                    <p class="italic mb-16">(Ký, họ tên)</p>
+                                    <p class="font-bold" id="print-approver-name">...</p>
+                                </div>
+                                
+                                <!-- Cột Người lập (Phải) - Luôn hiển thị -->
+                                <div class="text-center">
+                                    <p class="font-bold" id="print-creator-title">...</p>
+                                    <p class="italic mb-16">(Ký, họ tên)</p>
+                                    <p class="font-bold" id="print-creator-name">...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const app = initializeApp({ apiKey: "AIzaSyBycBD4pI9HHKIjTcWvtu9x4tNWneYIEQg", authDomain: "aworkpro-appsviet.firebaseapp.com", projectId: "aworkpro-appsviet", storageBucket: "aworkpro-appsviet.appspot.com", messagingSenderId: "506799918789", appId: "1:506799918789:web:36342956082243258e6aac" });
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        let currentUser, allTasks = [], reportItems = [];
+        
+        // Default Config
+        const config = {
+            unit: 'TRUNG TÂM THƯ VIỆN', dept: 'BP NGHIỆP VỤ', recipient: 'Ban Giám đốc',
+            suffix: 'BC-TV', approverTitle: 'Trưởng phòng', approverName: '',
+            creatorTitle: 'Nhân viên', creatorName: '', showApprover: true
+        };
+
+        // --- Initialization ---
+        onAuthStateChanged(auth, u => {
+            if(u) { 
+                currentUser = u; 
+                if(!config.creatorName) config.creatorName = u.displayName; 
+                init(); 
+            } else location.href = '/login/';
+        });
+
+        function init() {
+            populateDateSelects();
+            loadSettings();
+            fetchData(); // Load initial data
+            
+            // Event Listeners
+            document.getElementById('btn-refresh').onclick = () => fetchData(true);
+            document.getElementById('btn-print').onclick = () => window.print();
+            document.getElementById('btn-add-group').onclick = addGroup;
+            document.getElementById('btn-toggle-config').onclick = toggleConfig;
+            document.getElementById('btn-auto-suggest').onclick = generateSuggestions;
+            document.getElementById('chk-show-approver').onchange = (e) => {
+                config.showApprover = e.target.checked;
+                updatePreviewText(); saveSettings();
+            };
+            document.getElementById('zoom-range').oninput = (e) => {
+                document.getElementById('preview-wrapper').style.transform = `scale(${e.target.value})`;
+            };
+            document.getElementById('inp-suggestions').oninput = (e) => {
+                document.getElementById('print-suggest').innerText = e.target.value || 'Không có.';
+            };
+
+            // Bind Config Inputs
+            document.querySelectorAll('.cfg-inp').forEach(inp => {
+                inp.value = config[inp.dataset.key] || '';
+                inp.addEventListener('input', e => {
+                    config[e.target.dataset.key] = e.target.value;
+                    updatePreviewText(); saveSettings();
+                });
+            });
+        }
+
+        // --- Core Logic ---
+        async function fetchData(forceRefresh = false) {
+            showSkeleton(true);
+            
+            const q = collection(db, 'users', currentUser.uid, 'tasks');
+            const snap = await getDocs(q);
+            allTasks = snap.docs.map(d => ({id: d.id, ...d.data()}));
+
+            const m = parseInt(document.getElementById('sel-month').value);
+            const y = parseInt(document.getElementById('sel-year').value);
+
+            // Filter Month Tasks
+            const monthTasks = allTasks.filter(t => {
+                if(t.isRecurring && !t.instanceDate) return false;
+                const d = new Date(t.endDate || t.startDate || t.dueDate);
+                return d.getMonth() === m && d.getFullYear() === y;
+            });
+
+            // Load Saved Layout
+            const layoutRef = doc(db, 'users', currentUser.uid, 'report_layouts', `${y}-${m}`);
+            const layoutSnap = await getDoc(layoutRef);
+
+            if(layoutSnap.exists() && !forceRefresh) {
+                const savedItems = layoutSnap.data().items;
+                const savedIds = new Set(savedItems.map(i => i.id));
+                
+                reportItems = savedItems.map(i => {
+                    if(i.isGroup) return i;
+                    const t = monthTasks.find(x => x.id === i.id);
+                    return t ? {...t, reportInclude: i.reportInclude !== false} : null;
+                }).filter(Boolean);
+
+                const newTasks = monthTasks.filter(t => !savedIds.has(t.id));
+                if(newTasks.length) {
+                    reportItems.push({id: 'grp_new_'+Date.now(), title: 'Mới bổ sung', isGroup: true, reportInclude: true});
+                    reportItems.push(...newTasks.map(t => ({...t, reportInclude: true})));
+                }
+            } else {
+                reportItems = monthTasks.sort((a,b) => new Date(a.startDate) - new Date(b.startDate))
+                    .map(t => ({...t, reportInclude: true}));
+            }
+            
+            showSkeleton(false);
+            renderSortList();
+            renderPreview();
+        }
+
+        // --- Rendering ---
+        function renderSortList() {
+            const el = document.getElementById('sort-list');
+            const frag = document.createDocumentFragment();
+            
+            if(reportItems.length === 0) {
+                el.innerHTML = '<div class="p-4 text-center text-slate-400 text-xs">Không có dữ liệu cho tháng này.</div>';
+                return;
+            }
+            
+            el.innerHTML = '';
+            reportItems.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = `sortable-item flex items-center gap-2 p-2 rounded-lg border text-sm ${item.isGroup ? 'bg-slate-200 border-slate-300 font-bold text-slate-800 mt-2' : 'bg-white border-slate-100 text-slate-600'}`;
+                div.draggable = true;
+                
+                div.innerHTML = `
+                    <div class="cursor-move text-slate-400 hover:text-slate-600"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8h16M4 16h16"></path></svg></div>
+                    <input type="checkbox" ${item.reportInclude ? 'checked' : ''} class="w-4 h-4 text-a-primary rounded focus:ring-a-primary border-gray-300">
+                    <span class="flex-1 truncate select-none ${!item.reportInclude ? 'opacity-50 line-through' : ''}">${item.title}</span>
+                    ${item.isGroup ? '<button class="text-rose-400 hover:text-rose-600 p-1 rounded-full hover:bg-rose-50 transition-colors">×</button>' : ''}
+                `;
+                
+                const checkbox = div.querySelector('input');
+                checkbox.onchange = (e) => { 
+                    item.reportInclude = e.target.checked; 
+                    div.querySelector('span').classList.toggle('opacity-50', !item.reportInclude);
+                    div.querySelector('span').classList.toggle('line-through', !item.reportInclude);
+                    renderPreview(); saveLayout(); 
+                };
+                
+                if(item.isGroup) {
+                    const btnDel = div.querySelector('button');
+                    btnDel.onclick = () => { reportItems.splice(idx, 1); renderSortList(); renderPreview(); saveLayout(); };
+                    const span = div.querySelector('span');
+                    span.onclick = () => {
+                        const newTitle = prompt("Sửa tên nhóm:", item.title);
+                        if(newTitle) { item.title = newTitle; renderSortList(); renderPreview(); saveLayout(); }
+                    };
+                }
+
+                div.ondragstart = e => { e.dataTransfer.setData('idx', idx); div.classList.add('dragging'); };
+                div.ondragend = () => { div.classList.remove('dragging'); document.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over')); };
+                div.ondragover = e => { e.preventDefault(); div.classList.add('drag-over'); };
+                div.ondragleave = () => div.classList.remove('drag-over');
+                div.ondrop = e => {
+                    e.preventDefault();
+                    div.classList.remove('drag-over');
+                    const fromIdx = parseInt(e.dataTransfer.getData('idx'));
+                    if (fromIdx === idx) return;
+                    const movedItem = reportItems.splice(fromIdx, 1)[0];
+                    reportItems.splice(idx, 0, movedItem);
+                    renderSortList(); renderPreview(); saveLayout();
+                };
+
+                frag.appendChild(div);
+            });
+            el.appendChild(frag);
+        }
+
+        function renderPreview() {
+            updatePreviewText();
+            const tbody = document.getElementById('print-tbody');
+            let html = '';
+            let stt = 1;
+            
+            reportItems.forEach(item => {
+                if(item.isGroup) {
+                    const idx = reportItems.indexOf(item);
+                    const nextGroupIdx = reportItems.findIndex((x, i) => i > idx && x.isGroup);
+                    const sliceEnd = nextGroupIdx === -1 ? reportItems.length : nextGroupIdx;
+                    const children = reportItems.slice(idx + 1, sliceEnd);
+                    const hasActiveChildren = children.some(c => c.reportInclude);
+
+                    if (hasActiveChildren || item.reportInclude) {
+                         html += `<tr><td colspan="5" class="border border-black p-2 font-bold bg-slate-100 text-left">${item.title}</td></tr>`;
+                    }
+                } else if(item.reportInclude) {
+                    const d1 = item.startDate ? new Date(item.startDate).toLocaleDateString('vi-VN', {day:'2-digit', month:'2-digit'}) : '';
+                    const d2 = item.endDate ? new Date(item.endDate).toLocaleDateString('vi-VN', {day:'2-digit', month:'2-digit'}) : '';
+                    const desc = (item.description || '').replace(/- /g, '• ').replace(/\n/g, '<br>');
+                    
+                    html += `
+                        <tr>
+                            <td class="border border-black p-1.5 text-center align-top">${stt++}</td>
+                            <td class="border border-black p-1.5 align-top text-justify">
+                                <b>${item.title}</b>
+                                ${desc ? `<div class="text-[10pt] mt-1">${desc}</div>` : ''}
+                            </td>
+                            <td class="border border-black p-1.5 text-center align-top text-[10pt]">${d1}</td>
+                            <td class="border border-black p-1.5 text-center align-top text-[10pt]">${d2}</td>
+                            <td class="border border-black p-1.5 align-top text-[10pt] text-center">${item.collaborator || ''}</td>
+                        </tr>`;
+                }
+            });
+            
+            tbody.innerHTML = html;
+        }
+
+        function updatePreviewText() {
+            // Update Text Data
+            document.getElementById('print-unit').innerText = config.unit;
+            document.getElementById('print-dept').innerText = config.dept;
+            document.getElementById('print-recipient').innerText = config.recipient;
+            document.getElementById('print-approver-title').innerText = config.approverTitle;
+            document.getElementById('print-approver-name').innerText = config.approverName;
+            document.getElementById('print-creator-title').innerText = config.creatorTitle;
+            document.getElementById('print-creator-name').innerText = config.creatorName;
+            
+            // Logic Ngày Hiện Tại (Real-time Date)
+            const now = new Date();
+            const m_data = parseInt(document.getElementById('sel-month').value) + 1;
+            const y_data = document.getElementById('sel-year').value;
+            
+            document.getElementById('print-num').innerText = `${m_data}/${config.suffix}`;
+            document.getElementById('print-month-title').innerText = `${m_data}/${y_data}`;
+            
+            // "Tp.HCM, ngày ..." luôn lấy ngày thực tế hôm nay
+            document.getElementById('print-date').innerText = `Tp.HCM, ngày ${now.getDate()} tháng ${now.getMonth() + 1} năm ${now.getFullYear()}`;
+
+            // Logic Ẩn/Hiện Người Duyệt
+            // Sử dụng 'visibility: hidden' để giữ khoảng trắng, đảm bảo cột bên phải không bị nhảy
+            const approverArea = document.getElementById('area-approver');
+            if (config.showApprover) {
+                approverArea.style.visibility = 'visible';
+            } else {
+                approverArea.style.visibility = 'hidden';
+            }
+        }
+
+        // --- Helpers & Utils ---
+        function showSkeleton(show) {
+            const paperSkel = document.getElementById('paper-skeleton');
+            const paperContent = document.getElementById('paper-content');
+            if(show) {
+                paperSkel.classList.remove('hidden');
+                paperContent.classList.add('hidden');
+            } else {
+                paperSkel.classList.add('hidden');
+                paperContent.classList.remove('hidden');
+            }
+        }
+
+        function addGroup() {
+            const title = prompt("Nhập tên nhóm mới (VD: Công việc phát sinh):");
+            if(title) {
+                reportItems.push({id: 'grp_'+Date.now(), title, isGroup: true, reportInclude: true});
+                renderSortList(); renderPreview(); saveLayout();
+            }
+        }
+
+        function generateSuggestions() {
+            const activeTasks = reportItems.filter(i => !i.isGroup && i.reportInclude);
+            const overdue = activeTasks.filter(t => t.status === 'overdue').length;
+            const completed = activeTasks.filter(t => t.status === 'completed').length;
+            const txt = `Báo cáo tháng ${parseInt(document.getElementById('sel-month').value)+1}:\n- Hoàn thành: ${completed} công việc.\n- Tồn đọng/Quá hạn: ${overdue} công việc.\n- Kiến nghị: Đảm bảo tiến độ cho các công việc trọng tâm tháng sau.`;
+            document.getElementById('inp-suggestions').value = txt;
+            document.getElementById('print-suggest').innerText = txt;
+        }
+
+        function toggleConfig() {
+            const panel = document.getElementById('config-panel');
+            const icon = document.getElementById('icon-config');
+            panel.classList.toggle('hidden');
+            icon.style.transform = panel.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+        }
+
+        // --- Persistence ---
+        async function saveLayout() {
+            const m = document.getElementById('sel-month').value;
+            const y = document.getElementById('sel-year').value;
+            const data = reportItems.map(i => ({
+                id: i.id, title: i.title, isGroup: i.isGroup || false, reportInclude: i.reportInclude
+            }));
+            await setDoc(doc(db, 'users', currentUser.uid, 'report_layouts', `${y}-${m}`), { items: data });
+        }
+
+        function saveSettings() {
+            localStorage.setItem('aworkpro_conf', JSON.stringify(config));
+        }
+        function loadSettings() {
+            const s = JSON.parse(localStorage.getItem('aworkpro_conf'));
+            if(s) Object.assign(config, s);
+            document.getElementById('chk-show-approver').checked = config.showApprover;
+        }
+        function populateDateSelects() {
+            const m = document.getElementById('sel-month'), y = document.getElementById('sel-year');
+            for(let i=0;i<12;i++) m.innerHTML += `<option value="${i}" ${i===new Date().getMonth()?'selected':''}>Tháng ${i+1}</option>`;
+            for(let i=2023;i<=2030;i++) y.innerHTML += `<option value="${i}" ${i===new Date().getFullYear()?'selected':''}>${i}</option>`;
+        }
+    </script>
+</body>
+</html>
