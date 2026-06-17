@@ -272,18 +272,18 @@ export default function TemplatesPage() {
             <h3 className="templates-guide-title">Công việc định kỳ là gì?</h3>
             <p className="templates-guide-text">
               Công việc định kỳ là những công việc <strong>lặp lại hàng tháng</strong> trong báo cáo của bạn.
-              Thay vì nhập lại cùng một nội dung mỗi tháng, bạn tạo một lần và dùng nút <strong>"+ Thêm báo cáo"</strong> để thêm nhanh vào tháng hiện tại.
+              Thay vì nhập lại cùng một nội dung mỗi tháng, bạn tạo một lần và dùng nút <strong>&ldquo;+ Thêm báo cáo&rdquo;</strong> để thêm nhanh vào tháng hiện tại.
             </p>
 
             <h4 className="templates-guide-subtitle">🔄 Tạo công việc định kỳ</h4>
             <p className="templates-guide-text">
-              Vào <strong>Tổng quan</strong> → tạo công việc mới → bật nút <strong>"Định kỳ"</strong>.
+              Vào <strong>Tổng quan</strong> → tạo công việc mới → bật nút <strong>&ldquo;Định kỳ&rdquo;</strong>.
               Công việc sẽ xuất hiện tại đây để dùng lại mỗi tháng.
             </p>
 
             <h4 className="templates-guide-subtitle">📋 Sử dụng trong báo cáo</h4>
             <p className="templates-guide-text">
-              Tại trang <strong>Định kỳ</strong>, chọn tháng cần báo cáo, nhấn <strong>"+ Thêm báo cáo"</strong> trên công việc muốn thêm.
+              Tại trang <strong>Định kỳ</strong>, chọn tháng cần báo cáo, nhấn <strong>&ldquo;+ Thêm báo cáo&rdquo;</strong> trên công việc muốn thêm.
               Công việc sẽ được sao chép vào báo cáo tháng đó ngay lập tức.
             </p>
 

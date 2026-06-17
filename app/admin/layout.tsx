@@ -159,11 +159,40 @@ export default function AdminLayout({
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
 
+  /* ─── Auth guard ─── */
+
+  const [authReady, setAuthReady] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const auth = getFirebaseAuth();
+    let handled = false;
+
+    const offAuth = onAuthStateChanged(auth, (user) => {
+      if (handled) return;
+      handled = true;
+
+      if (user) {
+        setIsAuthenticated(true);
+        setAuthReady(true);
+      } else {
+        setIsAuthenticated(false);
+        setAuthReady(true);
+        router.replace('/login/');
+      }
+    });
+
+    return () => {
+      offAuth();
+    };
+  }, [router]);
+
   /* ─── Badge counts from Firestore ─── */
 
   const [badgeCounts, setBadgeCounts] = useState<Record<string, number>>({});
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     const auth = getFirebaseAuth();
     const offAuth = onAuthStateChanged(auth, (user) => {
       if (!user) return;
@@ -195,7 +224,7 @@ export default function AdminLayout({
       };
     });
     return () => offAuth();
-  }, []);
+  }, [isAuthenticated]);
 
   /* ─── Filtered search items ─── */
 
@@ -221,11 +250,12 @@ export default function AdminLayout({
   }, [currentPath]);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     const auth = getFirebaseAuth();
     return onAuthStateChanged(auth, (user) => {
       setUserLabel(user?.displayName ? `Chào ${user.displayName}!` : 'Chào bạn!');
     });
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     setMobileNavOpen(false);
@@ -285,6 +315,19 @@ export default function AdminLayout({
   /* ─── Collapse sidebar on desktop only ─── */
 
   const isDesktopCollapsed = sidebarCollapsed && typeof window !== 'undefined' && window.innerWidth > 920;
+
+  /* ─── Auth loading screen ─── */
+
+  if (!authReady || !isAuthenticated) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-slate-50 z-50">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-cyan-600 border-t-transparent rounded-full animate-spin" />
+          <p className="text-slate-600 font-medium">Đang xác thực...</p>
+        </div>
+      </div>
+    );
+  }
 
   /* ─── Render ─── */
 
