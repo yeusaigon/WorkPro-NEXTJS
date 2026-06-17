@@ -5,9 +5,9 @@
 .admin-shell {
   min-height: 100vh;
   display: grid;
-  grid-template-columns: 272px minmax(0, 1fr);
+  grid-template-columns: 320px minmax(0, 1fr);
   background:
-    linear-gradient(90deg, rgba(255,255,255,0.97) 0 272px, transparent 272px),
+    linear-gradient(90deg, rgba(255,255,255,0.97) 0 320px, transparent 320px),
     radial-gradient(circle at 86% 8%, rgba(37,99,235,0.08), transparent 28%),
     linear-gradient(180deg, #f8fafc 0%, #eef6fb 100%);
 }
@@ -35,8 +35,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 8px 10px 10px;
+  gap: 12px;
+  padding: 12px 14px 14px;
 }
 
 /* ─── Nav ─── */
@@ -58,33 +58,33 @@
   gap: 2px;
 }
 .admin-nav-group + .admin-nav-group {
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .admin-nav-item {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 0 10px;
-  border-radius: 10px;
+  gap: 14px;
+  min-height: 48px;
+  padding: 0 14px;
+  border-radius: 12px;
   color: #334155;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   position: relative;
   transition: background 140ms ease, color 140ms ease;
 }
 .admin-nav-item::before {
   content: '';
   position: absolute;
-  top: 6px; bottom: 6px; left: 0;
+  top: 8px; bottom: 8px; left: 0;
   width: 3px;
   border-radius: 0 999px 999px 0;
   background: transparent;
   transition: background 140ms ease;
 }
 .admin-nav-item svg {
-  width: 22px; height: 22px;
+  width: 24px; height: 24px;
   flex-shrink: 0;
 }
 .admin-nav-item-icon {
@@ -104,12 +104,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 22px; height: 22px;
-  padding: 0 6px;
+  min-width: 24px; height: 24px;
+  padding: 0 8px;
   border-radius: 999px;
   background: #ef4444;
   color: #fff;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   flex-shrink: 0;
   margin-left: auto;
@@ -131,9 +131,9 @@
 
 .admin-sidebar-bottom {
   display: grid;
-  gap: 8px;
-  padding: 10px;
-  border-radius: 12px;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 14px;
   background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(59,130,246,0.02));
   border: 1px solid rgba(148,163,184,0.1);
   flex-shrink: 0;
@@ -147,7 +147,7 @@
 }
 
 .admin-brand-greeting {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #334155;
 }
@@ -156,10 +156,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 34px; height: 34px;
+  width: 38px; height: 38px;
   padding: 0;
   border: 0;
-  border-radius: 8px;
+  border-radius: 10px;
   background: transparent;
   color: #94a3b8;
   cursor: pointer;
@@ -170,11 +170,11 @@
   background: rgba(239,68,68,0.06);
 }
 .admin-signout-icon svg {
-  width: 18px; height: 18px;
+  width: 20px; height: 20px;
 }
 
 .admin-sidebar-footer-copy {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   color: #94a3b8;
 }
