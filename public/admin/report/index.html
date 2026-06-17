@@ -262,7 +262,11 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        const app = initializeApp({ apiKey: "AIzaSyBycBD4pI9HHKIjTcWvtu9x4tNWneYIEQg", authDomain: "aworkpro-appsviet.firebaseapp.com", projectId: "aworkpro-appsviet", storageBucket: "aworkpro-appsviet.appspot.com", messagingSenderId: "506799918789", appId: "1:506799918789:web:36342956082243258e6aac" });
+        const firebaseConfig = await fetch('/api/firebase-config').then(r => {
+            if (!r.ok) throw new Error('Failed to load Firebase configuration');
+            return r.json();
+        });
+        const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         
